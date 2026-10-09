@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#202823" />
+    <title>Administration — Alex Renov &amp; Voica Renov</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <main class="admin-shell">
+      <header class="admin-topbar">
+        <a class="admin-brand" href="index.html"><span class="admin-mark">A<span>V</span></span><span>ALEX RENOV <i>&amp;</i> VOICA RENOV</span></a>
+        <span class="admin-label">ESPACE PRIVÉ</span>
+      </header>
+
+      <section class="admin-state setup-state" id="setup-state" hidden>
+        <p class="eyebrow">CONFIGURATION NÉCESSAIRE</p>
+        <h1>Connecter votre espace privé</h1>
+        <p>Renseignez l’URL et la clé publique de votre projet Supabase dans <code>site-config.js</code>, puis exécutez <code>supabase/schema.sql</code>. Cette page reste protégée par l’authentification et les règles de la base.</p>
+        <a href="README.md">Voir le guide de configuration →</a>
+      </section>
+
+      <section class="admin-state login-state" id="login-state" hidden>
+        <p class="eyebrow">ALEX RENOV × VOICA RENOV</p>
+        <h1>Administration</h1>
+        <p>Connectez-vous avec le compte administrateur autorisé.</p>
+        <form id="login-form" class="admin-form">
+          <label>Adresse e-mail<input name="email" type="email" autocomplete="username" required /></label>
+          <label>Mot de passe<input name="password" type="password" autocomplete="current-password" required /></label>
+          <button class="admin-button" type="submit">Se connecter</button>
+          <p class="admin-status" id="login-status" role="status"></p>
+        </form>
+      </section>
+
+      <section class="dashboard" id="dashboard" hidden>
+        <div class="dashboard-heading">
+          <div><p class="eyebrow">ESPACE PRIVÉ</p><h1>Votre activité</h1><p>Gérez les demandes, les réalisations et les avis publiés sur votre site.</p></div>
+          <button class="signout-button" id="signout-button" type="button">Se déconnecter</button>
+        </div>
+        <nav class="admin-tabs" aria-label="Sections d’administration">
+          <button class="active" type="button" data-panel="inquiries-panel">Demandes <span id="inquiry-count">0</span></button>
+          <button type="button" data-panel="portfolio-panel">Portfolio</button>
+          <button type="button" data-panel="reviews-panel">Avis clients</button>
+        </nav>
+
+        <section class="admin-panel" id="inquiries-panel">
+          <div class="panel-heading"><div><p class="eyebrow">NOUVEAUX CLIENTS</p><h2>Demandes de projet</h2></div><button class="refresh-button" data-refresh="inquiries" type="button">Actualiser ↻</button></div>
+          <div class="record-list" id="inquiries-list"><p class="empty-message">Chargement des demandes…</p></div>
+        </section>
+
+        <section class="admin-panel" id="portfolio-panel" hidden>
+          <div class="panel-heading"><div><p class="eyebrow">PHOTOS DE CHANTIERS</p><h2>Ajouter une réalisation</h2></div></div>
+          <p class="admin-note">Publiez uniquement des photos de travaux réellement effectués par l’équipe et pour lesquels vous avez l’autorisation du client.</p>
+          <form id="portfolio-form" class="admin-form form-wide">
+            <div class="upload-drop"><label>Photo du chantier<input name="photo" type="file" accept="image/jpeg,image/png,image/webp" required /></label><small>JPG, PNG ou WebP · maximum 10 Mo</small></div>
+            <div class="form-row"><label>Titre<input name="title" maxlength="120" required placeholder="Ex. Rénovation d’un appartement" /></label><label>Commune<input name="location" maxlength="120" placeholder="Ex. Nice" /></label></div>
+            <div class="form-row"><label>Type de travaux<select name="category" required><option value="">Choisir une catégorie</option><option>Extérieurs</option><option>Cuisines</option><option>Salles de bain</option><option>Intérieurs</option><option>Autres travaux</option></select></label><label>Ordre d’affichage<input name="sort_order" type="number" min="0" max="999" value="0" /></label></div>
+            <label>Description<textarea name="description" rows="3" maxlength="500" placeholder="Quelques mots sur les travaux réalisés"></textarea></label>
+            <label class="consent-check"><input name="client_permission" type="checkbox" required /><span>J’ai l’autorisation de publier cette image.</span></label>
+            <button class="admin-button" type="submit">Ajouter au portfolio</button><p class="admin-status" id="portfolio-status" role="status"></p>
+          </form>
+          <div class="panel-heading secondary-heading"><div><p class="eyebrow">EN LIGNE</p><h2>Réalisations publiées</h2></div></div>
+          <div class="record-list" id="portfolio-list"><p class="empty-message">Chargement du portfolio…</p></div>
+        </section>
+
+        <section class="admin-panel" id="reviews-panel" hidden>
+          <div class="panel-heading"><div><p class="eyebrow">RETOURS AUTHENTIQUES</p><h2>Ajouter un avis client</h2></div></div>
+          <p class="admin-note">Saisissez un avis réel, vérifiez sa source et obtenez l’accord du client avant publication. N’utilisez pas de nom, citation ou note inventés.</p>
+          <form id="review-form" class="admin-form form-wide">
+            <div class="form-row"><label>Nom affiché<input name="author_name" maxlength="100" required placeholder="Prénom ou nom autorisé" /></label><label>Commune<input name="location" maxlength="120" placeholder="Facultatif" /></label></div>
+            <label>Avis du client<textarea name="quote" rows="4" maxlength="1200" required></textarea></label>
+            <div class="form-row"><label>Note donnée par le client<select name="rating" required><option value="">Choisir</option><option value="5">5 sur 5</option><option value="4">4 sur 5</option><option value="3">3 sur 5</option><option value="2">2 sur 5</option><option value="1">1 sur 5</option></select></label><label>Plateforme source<input name="source_platform" maxlength="80" placeholder="Ex. Google, Trustpilot" /></label></div>
+            <label>Lien vers l’avis original<input name="source_url" type="url" placeholder="https://… (facultatif)" /></label>
+            <label class="consent-check"><input name="permission_to_publish" type="checkbox" required /><span>Le client m’a autorisé à publier cet avis sur le site.</span></label>
+            <button class="admin-button" type="submit">Publier l’avis</button><p class="admin-status" id="review-status" role="status"></p>
+          </form>
+          <div class="panel-heading secondary-heading"><div><p class="eyebrow">EN LIGNE</p><h2>Avis publiés</h2></div></div>
+          <div class="record-list" id="reviews-admin-list"><p class="empty-message">Chargement des avis…</p></div>
+        </section>
+      </section>
+      <footer class="admin-footer"><a href="index.html">← Retour au site</a><span>Alex Renov &amp; Voica Renov</span></footer>
+    </main>
+    <script src="site-config.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
+
